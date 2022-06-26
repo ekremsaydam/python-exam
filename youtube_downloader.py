@@ -1,5 +1,6 @@
 """Youtube downloader."""
-from pytube import YouTube # pip install pytube
+# pip install pytube
+from pytube import YouTube
 
 
 def youtube_indir(url: str, /, *, only_audio: bool = True,
