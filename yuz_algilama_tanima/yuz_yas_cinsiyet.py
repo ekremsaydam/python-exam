@@ -139,7 +139,7 @@ def predict_age_and_gender():
             yPos = start_y - 15
             while yPos < 15:
                 yPos += 15
-            box_color = (255, 0, 0) if gender == "Male" else (147, 20, 255)
+            box_color = (255, 0, 0) if gender == "Erkek" else (147, 20, 255)
             cv2.rectangle(frame, (start_x, start_y),
                           (end_x, end_y), box_color, 2)
             # Etiket işlenmiş görüntü
