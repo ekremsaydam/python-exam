@@ -1,7 +1,8 @@
 """Sifre uretme."""
 import random
 
-kucuk_harfler = "".join([chr(x) for x in range(ord("a"), ord("z"))])
+# kucuk_harfler = "".join([chr(x) for x in range(ord("a"), ord("z"))])
+kucuk_harfler = "".join((map(chr, range(ord("a"), ord("z")))))
 buyuk_harfler = kucuk_harfler.upper()
 rakamlar = "".join(list(map(str, range(0, 10))))
 semboller = "[]{}()+-*/.,;_-'\"`"
